@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>ADG Vision</title>
+  <link rel="icon" type="image/png" href="ADGVision_logo.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    #intro {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeOut 3s forwards;
+      animation-delay: 2.5s;
+      z-index: 10;
+    }
+
+    #intro img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(255, 87, 34, 0.8);
+      animation: scaleIn 2s ease;
+      object-fit: cover;
+    }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0.1); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .logo-mini {
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 64, 129, 0.8);
+      z-index: 1000;
+      display: none;
+    }
+
+    .logo-mini img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #home {
+      height: 100%;
+      width: 100%;
+      background: url('fundo.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    #home button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      background: linear-gradient(45deg, orange, red, purple);
+      color: white;
+    }
+
+    #home button:hover {
+      opacity: 0.8;
+    }
+
+    #filmes, #registro {
+      display: none;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      background: linear-gradient(to bottom, #111, #000);
+      padding: 40px;
+      color: white;
+    }
+
+    #filtroGenero {
+      margin-bottom: 30px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      background-color: #222;
+      color: white;
+      border: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: #222;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 100, 100, 0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
+    .card .info {
+      padding: 10px;
+    }
+
+    #registro form {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+    }
+
+    #registro label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    #registro input, #registro select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: white;
+    }
+
+    #registro button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, orange, red, purple);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="intro">
+  <img src="ADGVision_logo.png" alt="ADG Vision">
+</div>
+
+<div class="logo-mini" id="miniLogo">
+  <img src="ADGVision_logo.png" alt="Mini Logo">
+</div>
+
+<div id="home">
+  <button onclick="show('filmes')">Entrar</button>
+  <button onclick="show('registro')">Registrar-se</button>
+</div>
+
+<div id="filmes">
+  <h1>Filmes em Destaque</h1>
+
+  <select id="filtroGenero" onchange="filtrarGenero()">
+    <option value="todos">Todos os gêneros</option>
+    <option value="aventura">Aventura</option>
+    <option value="infantil">Infantil</option>
+    <option value="documentario">Documentário</option>
+    <option value="fantasia">Fantasia</option>
+    <option value="ação">Ação</option>
+    <option value="educativo">Educativo</option>
+    <option value="ficção">Ficção Científica</option>
+    <option value="mistério">Mistério</option>
+  </select>
+
+  <div class="grid" id="gradeFilmes">
+    <!-- Cada card tem um data-genero -->
+    <div class="card" data-genero="aventura"><img src="Segredos Submarinos.png"><div class="info"><h3>Segredos Submarinos</h3><p>Uma equipe de mergulhadores descobre uma cidade submersa cheia de mistérios perigosos. O que deveria ser ciência se transforma em sobrevivência.</p></div></div>
+    <div class="card" data-genero="infantil"><img src="Desenhos Divertidos.png"><div class="info"><h3>Desenhos Divertidos</h3><p>Uma série animada hilária sobre um grupo de lápis mágicos que ganham vida e causam confusões no mundo real.</p></div></div>
+    <div class="card" data-genero="aventura"><img src="A Ilha Desconhecida.png"><div class="info"><h3>A Ilha Desconhecida</h3><p>Exploradores ficam presos em uma ilha misteriosa que não aparece em nenhum mapa. Criaturas e ruínas escondem segredos milenares.</p></div></div>
+    <div class="card" data-genero="documentario"><img src="Aprendendo a Programar.png"><div class="info"><h3>Aprendendo a Programar</h3><p>Documentário que acompanha a jornada de novatos em tecnologia enquanto enfrentam o desafio de aprender a programar do zero.</p></div></div>
+    <div class="card" data-genero="mistério"><img src="Enigmas do Passado.png"><div class="info"><h3>Enigmas do Passado</h3><p>Uma historiadora desvenda uma conspiração que conecta artefatos antigos a eventos modernos. A cada episódio, mais mistérios emergem.</p></div></div>
+    <div class="card" data-genero="fantasia"><img src="Contos Fantásticos.png"><div class="info"><h3>Contos Fantásticos</h3><p>Em um reino mágico, histórias de amor e coragem se entrelaçam em uma jornada épica com personagens encantadores e desafios surreais.</p></div></div>
+    <div class="card" data-genero="aventura"><img src="Expedição nas Montanhas.png"><div class="info"><h3>Expedição nas Montanhas</h3><p>Um grupo de atletas extremos desafia a natureza em uma competição de sobrevivência nas montanhas mais perigosas do planeta.</p></div></div>
+    <div class="card" data-genero="educativo"><img src="Desvendando o Corpo Humano.png"><div class="info"><h3>Desvendando o Corpo Humano</h3><p>Uma jornada fascinante pelas maravilhas do corpo humano, com imagens impressionantes e explicações acessíveis para todas as idades.</p></div></div>
+    <div class="card" data-genero="ação"><img src="Perseguição Implacável.png"><div class="info"><h3>Perseguição Implacável</h3><p>Um ex-agente é forçado a voltar à ação quando sua filha é sequestrada por uma rede internacional de criminosos. Ele fará de tudo para salvá-la.</p></div></div>
+    <div class="card" data-genero="infantil"><img src="Alegria em Cores.png"><div class="info"><h3>Alegria em Cores</h3><p>Uma menina com dons artísticos transforma sua cidade cinza em um espetáculo de cores, espalhando amor e inspiração com seus desenhos mágicos.</p></div></div>
+    <div class="card" data-genero="ficção"><img src="Viagem Interestelar.png"><div class="info"><h3>Viagem Interestelar</h3><p>Uma equipe de exploradores parte em uma jornada além da galáxia para encontrar vida inteligente e salvar a humanidade da extinção.</p></div></div>
+    <div class="card" data-genero="educativo"><img src="Matemática Criativa.png"><div class="info"><h3>Matemática Criativa</h3><p>Este documentário educativo mostra como a matemática está presente em tudo ao nosso redor, de forma lúdica e acessível.</p></div></div>
+    <div class="card" data-genero="mistério"><img src="O Caso Misterioso.png"><div class="info"><h3>O Caso Misterioso</h3><p>Um detetive aposentado é chamado para resolver um crime impossível. Cada pista revela segredos do passado e do próprio investigador.</p></div></div>
+    <div class="card" data-genero="fantasia"><img src="Melodias Encantadoras.png"><div class="info"><h3>Melodias Encantadoras</h3><p>Em um reino encantado, um jovem músico descobre que suas canções têm o poder de curar corações e transformar destinos.</p></div></div>
+    <div class="card" data-genero="aventura"><img src="A Lenda do Tesouro Perdido.png"><div class="info"><h3>A Lenda do Tesouro Perdido</h3><p>Um mapa antigo leva um grupo de aventureiros a uma caçada por um tesouro lendário, enfrentando armadilhas e traições ao longo do caminho.</p></div></div>
+  </div>
+</div>
+
+<div id="registro">
+  <h1>Cadastro</h1>
+  <form>
+    <label>Nome:</label>
+    <input type="text" placeholder="Seu nome completo">
+    <label>Email:</label>
+    <input type="email" placeholder="email@exemplo.com">
+    <label>Data de nascimento:</label>
+    <input type="date">
+    <label>Plano:</label>
+    <select>
+      <option>Básico</option>
+      <option>Padrão</option>
+      <option>Premium</option>
+    </select>
+    <button type="submit">Registrar</button>
+  </form>
+</div>
+
+<script>
+  setTimeout(() => {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('home').style.display = 'flex';
+  }, 3000);
+
+  function show(section) {
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('filmes').style.display = 'none';
+    document.getElementById('registro').style.display = 'none';
+    document.getElementById(section).style.display = 'block';
+    if (section !== 'home') {
+      document.getElementById('miniLogo').style.display = 'block';
+    }
+  }
+
+  function filtrarGenero() {
+    const genero = document.getElementById('filtroGenero').value;
+    const cards = document.querySelectorAll('#gradeFilmes .card');
+
+    cards.forEach(card => {
+      if (genero === 'todos' || card.getAttribute('data-genero') === genero) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
